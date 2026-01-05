@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowRight, ShieldCheck, Zap, Trophy, ChevronRight, Download } from 'lucide-react';
+import { ArrowRight, ShieldCheck, Zap, Trophy, ChevronRight, Download, AlertCircle } from 'lucide-react';
 import { QUESTIONS, calculateResult, Archetype, getAssessmentQuestions, Question } from '@/lib/assessment';
 import RadarChart from '@/components/RadarChart';
 import { Certificate } from '@/components/Certificate';
@@ -29,12 +29,14 @@ export default function Home() {
   const [scores, setScores] = useState({ tech: 0, adapt: 0, ethics: 0 });
   const [result, setResult] = useState<Archetype | null>(null);
   const [userName, setUserName] = useState('');
+  const [showNameError, setShowNameError] = useState(false);
   const [isDownloading, setIsDownloading] = useState(false);
   const certificateRef = useRef<HTMLDivElement>(null);
 
   const startQuiz = () => {
     if (!userName.trim()) {
-      setUserName('Future Leader');
+      setShowNameError(true);
+      return;
     }
     // Randomly pick 4 from each category (Total 12 questions)
     const selected = getAssessmentQuestions(4);
@@ -198,14 +200,19 @@ export default function Home() {
               </p>
             </div>
 
-            <div className="flex flex-col md:flex-row items-center justify-center gap-4 max-w-md mx-auto w-full">
-              <div className="w-full space-y-2">
+            <div className="flex flex-col md:flex-row items-center justify-center gap-4 max-w-xl mx-auto w-full px-4">
+              <div className="w-full md:flex-1 space-y-2">
                 <input
                   type="text"
-                  placeholder="Enter Your Name (Optional)"
+                  placeholder="Enter Your Name (Required)"
                   value={userName}
-                  onChange={(e) => setUserName(e.target.value)}
-                  className="w-full p-4 rounded-xl bg-white/5 border border-white/10 focus:border-accent/50 focus:outline-none transition-all text-center md:text-left"
+                  onChange={(e) => {
+                    setUserName(e.target.value);
+                    if (showNameError && e.target.value.trim()) setShowNameError(false);
+                  }}
+                  className={`w-full p-4 rounded-xl bg-white/5 border transition-all text-center md:text-left ${
+                    showNameError ? 'border-red-500 ring-2 ring-red-500/20' : 'border-white/10 focus:border-accent/50'
+                  } focus:outline-none`}
                 />
               </div>
               <button 
@@ -431,6 +438,43 @@ export default function Home() {
               </div>
             )}
           </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Custom Error Modal */}
+      <AnimatePresence>
+        {showNameError && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setShowNameError(false)}
+              className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+            />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: 20 }}
+              className="relative w-full max-w-sm glass-card p-8 text-center space-y-6 border-red-500/30"
+            >
+              <div className="w-16 h-16 bg-red-500/20 rounded-full flex items-center justify-center mx-auto">
+                <AlertCircle className="text-red-500 w-8 h-8" />
+              </div>
+              <div className="space-y-2">
+                <h3 className="text-xl font-bold">Name Required</h3>
+                <p className="text-gray-400">
+                  Please enter your name to personalize your AI-Q certificate and assessment results.
+                </p>
+              </div>
+              <button
+                onClick={() => setShowNameError(false)}
+                className="w-full btn-primary py-3"
+              >
+                Got it
+              </button>
+            </motion.div>
+          </div>
         )}
       </AnimatePresence>
     </main>
