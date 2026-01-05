@@ -1,0 +1,73 @@
+@import "tailwindcss";
+
+:root {
+  --background: #050b2c; /* Deep Indigo Background */
+  --foreground: #ffffff;
+  --primary: #4f46e5; /* Cyber Purple/Indigo */
+  --secondary: #9333ea; /* Purple */
+  --accent: #f59e0b; /* Marigold Orange */
+  --card: #0f172a;
+  --card-foreground: #ffffff;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-secondary: var(--secondary);
+  --color-accent: var(--accent);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+}
+
+/* Fallback for html2canvas which doesn't support oklab/lab colors used by Tailwind 4 */
+* {
+  --tw-ring-color: rgba(59, 130, 246, 0.5) !important;
+  --tw-ring-offset-color: #fff !important;
+  --tw-shadow-color: rgba(0, 0, 0, 0.1) !important;
+  outline-color: currentColor !important;
+}
+
+/* Specifically target Tailwind 4's default focus rings */
+*:focus {
+  outline: 2px solid #4f46e5 !important;
+}
+
+body {
+  background: radial-gradient(circle at center, #0f172a 0%, #050b2c 100%);
+  color: var(--foreground);
+  min-height: 100vh;
+}
+
+/* Custom classes for the India-focused theme */
+.glass-card {
+  background: rgba(15, 23, 42, 0.7);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 1rem;
+}
+
+.text-gradient {
+  background: linear-gradient(135deg, #818cf8 0%, #c084fc 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+  color: white;
+  padding: 1rem 2rem; /* Larger padding for mobile touch */
+  border-radius: 0.75rem;
+  font-weight: 700;
+  transition: all 0.2s;
+  box-shadow: 0 4px 15px rgba(79, 70, 229, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(79, 70, 229, 0.6);
+}
