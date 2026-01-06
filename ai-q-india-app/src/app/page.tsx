@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import Link from 'next/link';
 import { ArrowRight, ShieldCheck, Zap, Trophy, ChevronRight, Download, AlertCircle } from 'lucide-react';
 import { QUESTIONS, calculateResult, Archetype, getAssessmentQuestions, Question } from '@/lib/assessment';
 import RadarChart from '@/components/RadarChart';
@@ -440,6 +441,16 @@ export default function Home() {
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* Footer Links */}
+      {step === 'landing' && (
+        <footer className="mt-16 py-8 border-t border-white/10 w-full max-w-4xl flex flex-wrap justify-center gap-x-8 gap-y-4 text-sm text-gray-500">
+          <Link href="/about" className="hover:text-white transition-colors">About Us</Link>
+          <Link href="/contact" className="hover:text-white transition-colors">Contact Us</Link>
+          <Link href="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link>
+          <p className="w-full text-center mt-4 opacity-50">&copy; {currentYear} AI-Q India. All rights reserved.</p>
+        </footer>
+      )}
 
       {/* Custom Error Modal */}
       <AnimatePresence>
